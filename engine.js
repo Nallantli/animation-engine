@@ -1,50 +1,50 @@
 let fastForward = false;
 
 const ATYPES = {
-	INITIALIZE_ENTITY: 'INITIALIZE_ENTITY',
-	REMOVE_ENTITY: 'REMOVE_ENTITY',
-	SET_SPRITE: 'SET_SPRITE',
-	CHANGE_POSITION_X: 'CHANGE_POSITION_X',
-	CHANGE_POSITION_Y: 'CHANGE_POSITION_Y',
-	CHANGE_SIZE_X: 'CHANGE_SIZE_X',
-	CHANGE_SIZE_Y: 'CHANGE_SIZE_Y',
-	CHANGE_OPACITY: 'CHANGE_OPACITY',
-	CHANGE_ROTATION: 'CHANGE_ROTATION',
-	PLAY_ANIMATION: 'PLAY_ANIMATION',
-	PAUSE_ANIMATION: 'PAUSE_ANIMATION',
+	INITIALIZE_ENTITY: "INITIALIZE_ENTITY",
+	REMOVE_ENTITY: "REMOVE_ENTITY",
+	SET_SPRITE: "SET_SPRITE",
+	CHANGE_POSITION_X: "CHANGE_POSITION_X",
+	CHANGE_POSITION_Y: "CHANGE_POSITION_Y",
+	CHANGE_SIZE_X: "CHANGE_SIZE_X",
+	CHANGE_SIZE_Y: "CHANGE_SIZE_Y",
+	CHANGE_OPACITY: "CHANGE_OPACITY",
+	CHANGE_ROTATION: "CHANGE_ROTATION",
+	PLAY_ANIMATION: "PLAY_ANIMATION",
+	PAUSE_ANIMATION: "PAUSE_ANIMATION",
 
 	// DISJOINT
-	SET_POSITION_X: 'SET_POSITION_X',
-	SET_POSITION_Y: 'SET_POSITION_Y',
-	SET_SIZE_X: 'SET_SIZE_X',
-	SET_SIZE_Y: 'SET_SIZE_Y',
-	SET_OPACITY: 'SET_OPACITY',
-	SET_ROTATION: 'SET_ROTATION',
-	PLAY_SOUND: 'PLAY_SOUND',
-	SET_FRAME: 'SET_FRAME',
+	SET_POSITION_X: "SET_POSITION_X",
+	SET_POSITION_Y: "SET_POSITION_Y",
+	SET_SIZE_X: "SET_SIZE_X",
+	SET_SIZE_Y: "SET_SIZE_Y",
+	SET_OPACITY: "SET_OPACITY",
+	SET_ROTATION: "SET_ROTATION",
+	PLAY_SOUND: "PLAY_SOUND",
+	SET_FRAME: "SET_FRAME",
 
 	// INTERNAL
-	START_CHANGE_POSITION_X: 'START_CHANGE_POSITION_X',
-	END_CHANGE_POSITION_X: 'END_CHANGE_POSITION_X',
-	START_CHANGE_POSITION_Y: 'START_CHANGE_POSITION_Y',
-	END_CHANGE_POSITION_Y: 'END_CHANGE_POSITION_Y',
+	START_CHANGE_POSITION_X: "START_CHANGE_POSITION_X",
+	END_CHANGE_POSITION_X: "END_CHANGE_POSITION_X",
+	START_CHANGE_POSITION_Y: "START_CHANGE_POSITION_Y",
+	END_CHANGE_POSITION_Y: "END_CHANGE_POSITION_Y",
 
-	START_CHANGE_SIZE_X: 'START_CHANGE_SIZE_X',
-	END_CHANGE_SIZE_X: 'END_CHANGE_SIZE_X',
-	START_CHANGE_SIZE_Y: 'START_CHANGE_SIZE_Y',
-	END_CHANGE_SIZE_Y: 'END_CHANGE_SIZE_Y',
+	START_CHANGE_SIZE_X: "START_CHANGE_SIZE_X",
+	END_CHANGE_SIZE_X: "END_CHANGE_SIZE_X",
+	START_CHANGE_SIZE_Y: "START_CHANGE_SIZE_Y",
+	END_CHANGE_SIZE_Y: "END_CHANGE_SIZE_Y",
 
-	START_CHANGE_OPACITY: 'START_CHANGE_OPACITY',
-	END_CHANGE_OPACITY: 'END_CHANGE_OPACITY',
+	START_CHANGE_OPACITY: "START_CHANGE_OPACITY",
+	END_CHANGE_OPACITY: "END_CHANGE_OPACITY",
 
-	START_CHANGE_ROTATION: 'START_CHANGE_ROTATION',
-	END_CHANGE_ROTATION: 'END_CHANGE_ROTATION'
+	START_CHANGE_ROTATION: "START_CHANGE_ROTATION",
+	END_CHANGE_ROTATION: "END_CHANGE_ROTATION",
 };
 
 const EASE_TYPES = {
-	CONSTANT: (start, end, i, l) => start + ((end - start) * (i / l)),
-	EASE_IN: (start, end, i, l) => start + ((end - start) * (i / l) * (i / l)),
-	EASE_OUT: (start, end, i, l) => start + ((end - start) * Math.sqrt(i / l)),
+	CONSTANT: (start, end, i, l) => start + (end - start) * (i / l),
+	EASE_IN: (start, end, i, l) => start + (end - start) * (i / l) * (i / l),
+	EASE_OUT: (start, end, i, l) => start + (end - start) * Math.sqrt(i / l),
 };
 
 class Sprite {
@@ -61,15 +61,37 @@ class Sprite {
 		if (mirror) {
 			ctx.save();
 			ctx.setTransform(
-				-1, 0, // set the direction of x axis
-				0, 1,   // set the direction of y axis
+				-1,
+				0, // set the direction of x axis
+				0,
+				1, // set the direction of y axis
 				x + sX, // set the x origin
 				y + 0
 			);
-			ctx.drawImage(this.img, 0, ((iIndex || 0) % this.indices) * this.sizeY, cropX || this.sizeX, cropY || this.sizeY, 0, 0, sX, sY);
+			ctx.drawImage(
+				this.img,
+				0,
+				((iIndex || 0) % this.indices) * this.sizeY,
+				cropX || this.sizeX,
+				cropY || this.sizeY,
+				0,
+				0,
+				sX,
+				sY
+			);
 			ctx.restore(); // restore the state as it was when this function was called
 		} else {
-			ctx.drawImage(this.img, 0, ((iIndex || 0) % this.indices) * this.sizeY, cropX || this.sizeX, cropY || this.sizeY, x, y, sX, sY);
+			ctx.drawImage(
+				this.img,
+				0,
+				((iIndex || 0) % this.indices) * this.sizeY,
+				cropX || this.sizeX,
+				cropY || this.sizeY,
+				x,
+				y,
+				sX,
+				sY
+			);
 		}
 	}
 }
@@ -83,7 +105,7 @@ class CompositeSprite {
 	}
 
 	draw(ctx, x, y, sX, sY, options = {}) {
-		this.sprites.forEach(sprite => sprite.draw(ctx, x, y, sX, sY, options));
+		this.sprites.forEach((sprite) => sprite.draw(ctx, x, y, sX, sY, options));
 	}
 }
 
@@ -96,34 +118,45 @@ class NumberText {
 	}
 
 	toN(c) {
-		if (c == '0' || Number(c)) {
+		if (c == "0" || Number(c)) {
 			return Number(c);
 		}
-		if (c.charCodeAt(0) >= 'A'.charCodeAt(0)) {
-			return 16 + (c.charCodeAt(0) - 'A'.charCodeAt(0));
+		if (c.charCodeAt(0) >= "A".charCodeAt(0)) {
+			return 16 + (c.charCodeAt(0) - "A".charCodeAt(0));
 		}
 		switch (c) {
-			case '+':
+			case "+":
 				return 10;
-			case '-':
+			case "-":
 				return 11;
-			case '%':
+			case "%":
 				return 12;
-			case '/':
+			case "/":
 				return 13;
-			case '*':
+			case "*":
 				return 14;
 			default:
 				return 15;
 		}
 	}
 
-	draw(ctx, x, y, sX, sY, iIndex, str) {
-		for (let i = 0; i < str.length; i++) {
-			if (str[i] === ' ') {
+	draw(ctx, x, y, sX, sY, options = {}) {
+		const { iIndex, text } = options;
+		for (let i = 0; i < text.length; i++) {
+			if (text[i] === " ") {
 				continue;
 			}
-			ctx.drawImage(this.img, this.sizeX * this.toN(str[i]), iIndex * this.sizeY, this.sizeX, this.sizeY, x + i * sX, y, sX, sY);
+			ctx.drawImage(
+				this.img,
+				this.sizeX * this.toN(text[i]),
+				iIndex * this.sizeY,
+				this.sizeX,
+				this.sizeY,
+				x + i * sX,
+				y,
+				sX,
+				sY
+			);
 		}
 	}
 }
@@ -133,12 +166,23 @@ class Font {
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
 		this.img = new Image();
-		this.img.src = fontPath
+		this.img.src = fontPath;
 	}
 
-	draw(ctx, x, y, sX, sY, iIndex, str) {
-		for (let i = 0; i < str.length; i++) {
-			ctx.drawImage(this.img, this.sizeX * str.charCodeAt(i), iIndex * this.sizeY, this.sizeX, this.sizeY, x + i * sX, y, sX, sY);
+	draw(ctx, x, y, sX, sY, options = {}) {
+		const { iIndex, text } = options;
+		for (let i = 0; i < text.length; i++) {
+			ctx.drawImage(
+				this.img,
+				this.sizeX * text.charCodeAt(i),
+				iIndex * this.sizeY,
+				this.sizeX,
+				this.sizeY,
+				x + i * sX,
+				y,
+				sX,
+				sY
+			);
 		}
 	}
 }
@@ -157,7 +201,7 @@ class AnimationEngine {
 	}
 
 	tickToFrame(tick) {
-		return Math.floor(tick * this.fps / this.tickTime);
+		return Math.floor((tick * this.fps) / this.tickTime);
 	}
 
 	initialize() {
@@ -167,10 +211,25 @@ class AnimationEngine {
 			parsedActions.push([]);
 		}
 		this.tracker = {};
-		actions.forEach(action => {
+		actions.forEach((action) => {
 			switch (action.type) {
 				case ATYPES.INITIALIZE_ENTITY: {
-					const { tick, id, sprite, alpha, posX, posY, sizeX, sizeY, rot, zIndex, iIndex, play, text, mirror } = action;
+					const {
+						tick,
+						id,
+						sprite,
+						alpha,
+						posX,
+						posY,
+						sizeX,
+						sizeY,
+						rot,
+						zIndex,
+						iIndex,
+						play,
+						text,
+						mirror,
+					} = action;
 					parsedActions[this.tickToFrame(tick)].push({
 						type: ATYPES.INITIALIZE_ENTITY,
 						id: id,
@@ -185,10 +244,10 @@ class AnimationEngine {
 						iIndex: iIndex || 0,
 						play: play || false,
 						text: text,
-						mirror: mirror || false
+						mirror: mirror || false,
 					});
 					this.tracker[id] = {
-						display: false
+						display: false,
 					};
 					break;
 				}
@@ -196,7 +255,7 @@ class AnimationEngine {
 					const { tick, id } = action;
 					parsedActions[this.tickToFrame(tick)].push({
 						type: ATYPES.REMOVE_ENTITY,
-						id: id
+						id: id,
 					});
 					break;
 				}
@@ -204,7 +263,7 @@ class AnimationEngine {
 					const { tick, id } = action;
 					parsedActions[this.tickToFrame(tick)].push({
 						type: ATYPES.PLAY_ANIMATION,
-						id: id
+						id: id,
 					});
 					break;
 				}
@@ -212,7 +271,7 @@ class AnimationEngine {
 					const { tick, id } = action;
 					parsedActions[this.tickToFrame(tick)].push({
 						type: ATYPES.PAUSE_ANIMATION,
-						id: id
+						id: id,
 					});
 					break;
 				}
@@ -221,7 +280,7 @@ class AnimationEngine {
 					parsedActions[this.tickToFrame(tick)].push({
 						type: ATYPES.SET_FRAME,
 						id: id,
-						iIndex: iIndex
+						iIndex: iIndex,
 					});
 					break;
 				}
@@ -234,7 +293,7 @@ class AnimationEngine {
 						play: play || false,
 						iIndex: iIndex || 0,
 						text: text,
-						mirror: mirror
+						mirror: mirror,
 					});
 					break;
 				}
@@ -243,8 +302,8 @@ class AnimationEngine {
 					parsedActions[this.tickToFrame(tick)].push({
 						type: ATYPES.SET_POSITION_X,
 						id: id,
-						posX: posX
-					})
+						posX: posX,
+					});
 					break;
 				}
 				case ATYPES.CHANGE_POSITION_X: {
@@ -252,12 +311,12 @@ class AnimationEngine {
 					parsedActions[this.tickToFrame(startTick)].push({
 						type: ATYPES.START_CHANGE_POSITION_X,
 						id: id,
-						ease: ease
+						ease: ease,
 					});
 					parsedActions[this.tickToFrame(endTick)].push({
 						type: ATYPES.END_CHANGE_POSITION_X,
 						id: id,
-						posX: posX
+						posX: posX,
 					});
 					break;
 				}
@@ -266,8 +325,8 @@ class AnimationEngine {
 					parsedActions[this.tickToFrame(tick)].push({
 						type: ATYPES.SET_POSITION_Y,
 						id: id,
-						posY: posY
-					})
+						posY: posY,
+					});
 					break;
 				}
 				case ATYPES.CHANGE_POSITION_Y: {
@@ -275,12 +334,12 @@ class AnimationEngine {
 					parsedActions[this.tickToFrame(startTick)].push({
 						type: ATYPES.START_CHANGE_POSITION_Y,
 						id: id,
-						ease: ease
+						ease: ease,
 					});
 					parsedActions[this.tickToFrame(endTick)].push({
 						type: ATYPES.END_CHANGE_POSITION_Y,
 						id: id,
-						posY: posY
+						posY: posY,
 					});
 					break;
 				}
@@ -289,8 +348,8 @@ class AnimationEngine {
 					parsedActions[this.tickToFrame(tick)].push({
 						type: ATYPES.SET_SIZE_X,
 						id: id,
-						sizeX: sizeX
-					})
+						sizeX: sizeX,
+					});
 					break;
 				}
 				case ATYPES.CHANGE_SIZE_X: {
@@ -298,12 +357,12 @@ class AnimationEngine {
 					parsedActions[this.tickToFrame(startTick)].push({
 						type: ATYPES.START_CHANGE_SIZE_X,
 						id: id,
-						ease: ease
+						ease: ease,
 					});
 					parsedActions[this.tickToFrame(endTick)].push({
 						type: ATYPES.END_CHANGE_SIZE_X,
 						id: id,
-						sizeX: sizeX
+						sizeX: sizeX,
 					});
 					break;
 				}
@@ -312,8 +371,8 @@ class AnimationEngine {
 					parsedActions[this.tickToFrame(tick)].push({
 						type: ATYPES.SET_SIZE_Y,
 						id: id,
-						sizeY: sizeY
-					})
+						sizeY: sizeY,
+					});
 					break;
 				}
 				case ATYPES.CHANGE_SIZE_Y: {
@@ -321,12 +380,12 @@ class AnimationEngine {
 					parsedActions[this.tickToFrame(startTick)].push({
 						type: ATYPES.START_CHANGE_SIZE_Y,
 						id: id,
-						ease: ease
+						ease: ease,
 					});
 					parsedActions[this.tickToFrame(endTick)].push({
 						type: ATYPES.END_CHANGE_SIZE_Y,
 						id: id,
-						sizeY: sizeY
+						sizeY: sizeY,
 					});
 					break;
 				}
@@ -335,8 +394,8 @@ class AnimationEngine {
 					parsedActions[this.tickToFrame(tick)].push({
 						type: ATYPES.SET_OPACITY,
 						id: id,
-						alpha: alpha
-					})
+						alpha: alpha,
+					});
 					break;
 				}
 				case ATYPES.CHANGE_OPACITY: {
@@ -344,12 +403,12 @@ class AnimationEngine {
 					parsedActions[this.tickToFrame(startTick)].push({
 						type: ATYPES.START_CHANGE_OPACITY,
 						id: id,
-						ease: ease
+						ease: ease,
 					});
 					parsedActions[this.tickToFrame(endTick)].push({
 						type: ATYPES.END_CHANGE_OPACITY,
 						id: id,
-						alpha: alpha
+						alpha: alpha,
 					});
 					break;
 				}
@@ -358,8 +417,8 @@ class AnimationEngine {
 					parsedActions[this.tickToFrame(tick)].push({
 						type: ATYPES.SET_ROTATION,
 						id: id,
-						rot: rot
-					})
+						rot: rot,
+					});
 					break;
 				}
 				case ATYPES.CHANGE_ROTATION: {
@@ -367,12 +426,12 @@ class AnimationEngine {
 					parsedActions[this.tickToFrame(startTick)].push({
 						type: ATYPES.START_CHANGE_ROTATION,
 						id: id,
-						ease: ease
+						ease: ease,
 					});
 					parsedActions[this.tickToFrame(endTick)].push({
 						type: ATYPES.END_CHANGE_ROTATION,
 						id: id,
-						rot: rot
+						rot: rot,
 					});
 					break;
 				}
@@ -381,8 +440,8 @@ class AnimationEngine {
 					parsedActions[this.tickToFrame(tick)].push({
 						type: ATYPES.PLAY_SOUND,
 						volume: volume,
-						audio: audio
-					})
+						audio: audio,
+					});
 					break;
 				}
 			}
@@ -392,13 +451,15 @@ class AnimationEngine {
 			this.internalActions.push([]);
 		}
 		for (let i = 0; i < parsedActions.length; i++) {
-			parsedActions[i].forEach(action => {
+			parsedActions[i].forEach((action) => {
 				switch (action.type) {
 					case ATYPES.START_CHANGE_POSITION_X: {
 						// find start position
 						let startX = undefined;
 						for (let j = i; j >= 0; j--) {
-							const relAction = parsedActions[j].find(action2 => action2.id === action.id && action2.posX !== undefined);
+							const relAction = parsedActions[j].find(
+								(action2) => action2.id === action.id && action2.posX !== undefined
+							);
 							if (relAction) {
 								startX = relAction.posX;
 								break;
@@ -408,7 +469,9 @@ class AnimationEngine {
 						let endX = undefined;
 						let endFrame = undefined;
 						for (let j = i + 1; j < parsedActions.length; j++) {
-							const relAction = parsedActions[j].find(action2 => action2.id === action.id && action2.type === ATYPES.END_CHANGE_POSITION_X);
+							const relAction = parsedActions[j].find(
+								(action2) => action2.id === action.id && action2.type === ATYPES.END_CHANGE_POSITION_X
+							);
 							if (relAction) {
 								endX = relAction.posX;
 								endFrame = j;
@@ -422,7 +485,7 @@ class AnimationEngine {
 							this.internalActions[j].push({
 								type: ATYPES.SET_POSITION_X,
 								id: action.id,
-								posX: newX
+								posX: newX,
 							});
 						}
 						break;
@@ -430,7 +493,7 @@ class AnimationEngine {
 					case ATYPES.END_CHANGE_POSITION_X: {
 						this.internalActions[i].push({
 							...action,
-							type: ATYPES.SET_POSITION_X
+							type: ATYPES.SET_POSITION_X,
 						});
 						break;
 					}
@@ -438,7 +501,9 @@ class AnimationEngine {
 						// find start position
 						let startY = undefined;
 						for (let j = i; j >= 0; j--) {
-							const relAction = parsedActions[j].find(action2 => action2.id === action.id && action2.posY !== undefined);
+							const relAction = parsedActions[j].find(
+								(action2) => action2.id === action.id && action2.posY !== undefined
+							);
 							if (relAction) {
 								startY = relAction.posY;
 								break;
@@ -448,7 +513,9 @@ class AnimationEngine {
 						let endY = undefined;
 						let endFrame = undefined;
 						for (let j = i + 1; j < parsedActions.length; j++) {
-							const relAction = parsedActions[j].find(action2 => action2.id === action.id && action2.type === ATYPES.END_CHANGE_POSITION_Y);
+							const relAction = parsedActions[j].find(
+								(action2) => action2.id === action.id && action2.type === ATYPES.END_CHANGE_POSITION_Y
+							);
 							if (relAction) {
 								endY = relAction.posY;
 								endFrame = j;
@@ -462,7 +529,7 @@ class AnimationEngine {
 							this.internalActions[j].push({
 								type: ATYPES.SET_POSITION_Y,
 								id: action.id,
-								posY: newY
+								posY: newY,
 							});
 						}
 						break;
@@ -470,7 +537,7 @@ class AnimationEngine {
 					case ATYPES.END_CHANGE_POSITION_Y: {
 						this.internalActions[i].push({
 							...action,
-							type: ATYPES.SET_POSITION_Y
+							type: ATYPES.SET_POSITION_Y,
 						});
 						break;
 					}
@@ -478,7 +545,9 @@ class AnimationEngine {
 						// find start alpha
 						let startSizeX = undefined;
 						for (let j = i; j >= 0; j--) {
-							const relAction = parsedActions[j].find(action2 => action2.id === action.id && action2.sizeX !== undefined);
+							const relAction = parsedActions[j].find(
+								(action2) => action2.id === action.id && action2.sizeX !== undefined
+							);
 							if (relAction) {
 								startSizeX = relAction.sizeX;
 								break;
@@ -488,7 +557,9 @@ class AnimationEngine {
 						let endSizeX = undefined;
 						let endFrame = undefined;
 						for (let j = i + 1; j < parsedActions.length; j++) {
-							const relAction = parsedActions[j].find(action2 => action2.id === action.id && action2.type === ATYPES.END_CHANGE_SIZE_X);
+							const relAction = parsedActions[j].find(
+								(action2) => action2.id === action.id && action2.type === ATYPES.END_CHANGE_SIZE_X
+							);
 							if (relAction) {
 								endSizeX = relAction.sizeX;
 								endFrame = j;
@@ -498,11 +569,11 @@ class AnimationEngine {
 						// calculate tween
 						const tweenLength = endFrame - i;
 						for (let j = i; j < endFrame; j++) {
-							const newSizeX = action.ease(startSizeX, endSizeX, j - i, tweenLength)
+							const newSizeX = action.ease(startSizeX, endSizeX, j - i, tweenLength);
 							this.internalActions[j].push({
 								type: ATYPES.SET_SIZE_X,
 								id: action.id,
-								sizeX: newSizeX
+								sizeX: newSizeX,
 							});
 						}
 						break;
@@ -510,7 +581,7 @@ class AnimationEngine {
 					case ATYPES.END_CHANGE_SIZE_X: {
 						this.internalActions[i].push({
 							...action,
-							type: ATYPES.SET_SIZE_X
+							type: ATYPES.SET_SIZE_X,
 						});
 						break;
 					}
@@ -518,7 +589,9 @@ class AnimationEngine {
 						// find start alpha
 						let startSizeY = undefined;
 						for (let j = i; j >= 0; j--) {
-							const relAction = parsedActions[j].find(action2 => action2.id === action.id && action2.sizeY !== undefined);
+							const relAction = parsedActions[j].find(
+								(action2) => action2.id === action.id && action2.sizeY !== undefined
+							);
 							if (relAction) {
 								startSizeY = relAction.sizeY;
 								break;
@@ -528,7 +601,9 @@ class AnimationEngine {
 						let endSizeY = undefined;
 						let endFrame = undefined;
 						for (let j = i + 1; j < parsedActions.length; j++) {
-							const relAction = parsedActions[j].find(action2 => action2.id === action.id && action2.type === ATYPES.END_CHANGE_SIZE_Y);
+							const relAction = parsedActions[j].find(
+								(action2) => action2.id === action.id && action2.type === ATYPES.END_CHANGE_SIZE_Y
+							);
 							if (relAction) {
 								endSizeY = relAction.sizeY;
 								endFrame = j;
@@ -538,11 +613,11 @@ class AnimationEngine {
 						// calculate tween
 						const tweenLength = endFrame - i;
 						for (let j = i; j < endFrame; j++) {
-							const newSizeY = action.ease(startSizeY, endSizeY, j - i, tweenLength)
+							const newSizeY = action.ease(startSizeY, endSizeY, j - i, tweenLength);
 							this.internalActions[j].push({
 								type: ATYPES.SET_SIZE_Y,
 								id: action.id,
-								sizeY: newSizeY
+								sizeY: newSizeY,
 							});
 						}
 						break;
@@ -550,7 +625,7 @@ class AnimationEngine {
 					case ATYPES.END_CHANGE_SIZE_Y: {
 						this.internalActions[i].push({
 							...action,
-							type: ATYPES.SET_SIZE_Y
+							type: ATYPES.SET_SIZE_Y,
 						});
 						break;
 					}
@@ -558,7 +633,9 @@ class AnimationEngine {
 						// find start alpha
 						let startAlpha = undefined;
 						for (let j = i; j >= 0; j--) {
-							const relAction = parsedActions[j].find(action2 => action2.id === action.id && action2.alpha !== undefined);
+							const relAction = parsedActions[j].find(
+								(action2) => action2.id === action.id && action2.alpha !== undefined
+							);
 							if (relAction) {
 								startAlpha = relAction.alpha;
 								break;
@@ -568,7 +645,9 @@ class AnimationEngine {
 						let endAlpha = undefined;
 						let endFrame = undefined;
 						for (let j = i + 1; j < parsedActions.length; j++) {
-							const relAction = parsedActions[j].find(action2 => action2.id === action.id && action2.type === ATYPES.END_CHANGE_OPACITY);
+							const relAction = parsedActions[j].find(
+								(action2) => action2.id === action.id && action2.type === ATYPES.END_CHANGE_OPACITY
+							);
 							if (relAction) {
 								endAlpha = relAction.alpha;
 								endFrame = j;
@@ -578,11 +657,11 @@ class AnimationEngine {
 						// calculate tween
 						const tweenLength = endFrame - i;
 						for (let j = i; j < endFrame; j++) {
-							const newAlpha = action.ease(startAlpha, endAlpha, j - i, tweenLength)
+							const newAlpha = action.ease(startAlpha, endAlpha, j - i, tweenLength);
 							this.internalActions[j].push({
 								type: ATYPES.SET_OPACITY,
 								id: action.id,
-								alpha: newAlpha
+								alpha: newAlpha,
 							});
 						}
 						break;
@@ -590,7 +669,7 @@ class AnimationEngine {
 					case ATYPES.END_CHANGE_OPACITY: {
 						this.internalActions[i].push({
 							...action,
-							type: ATYPES.SET_OPACITY
+							type: ATYPES.SET_OPACITY,
 						});
 						break;
 					}
@@ -598,7 +677,9 @@ class AnimationEngine {
 						// find start rot
 						let startRot = undefined;
 						for (let j = i; j >= 0; j--) {
-							const relAction = parsedActions[j].find(action2 => action2.id === action.id && action2.rot !== undefined);
+							const relAction = parsedActions[j].find(
+								(action2) => action2.id === action.id && action2.rot !== undefined
+							);
 							if (relAction) {
 								startRot = relAction.rot;
 								break;
@@ -608,7 +689,9 @@ class AnimationEngine {
 						let endRot = undefined;
 						let endFrame = undefined;
 						for (let j = i + 1; j < parsedActions.length; j++) {
-							const relAction = parsedActions[j].find(action2 => action2.id === action.id && action2.type === ATYPES.END_CHANGE_ROTATION);
+							const relAction = parsedActions[j].find(
+								(action2) => action2.id === action.id && action2.type === ATYPES.END_CHANGE_ROTATION
+							);
 							if (relAction) {
 								endRot = relAction.rot;
 								endFrame = j;
@@ -622,7 +705,7 @@ class AnimationEngine {
 							this.internalActions[j].push({
 								type: ATYPES.SET_ROTATION,
 								id: action.id,
-								rot: newRot
+								rot: newRot,
 							});
 						}
 						break;
@@ -630,7 +713,7 @@ class AnimationEngine {
 					case ATYPES.END_CHANGE_ROTATION: {
 						this.internalActions[i].push({
 							...action,
-							type: ATYPES.SET_ROTATION
+							type: ATYPES.SET_ROTATION,
 						});
 						break;
 					}
@@ -638,7 +721,9 @@ class AnimationEngine {
 						if (action.play || action.type === ATYPES.PLAY_ANIMATION) {
 							let startIndex = undefined;
 							for (let j = i; j >= 0; j--) {
-								const relAction = parsedActions[j].find(action2 => action2.id === action.id && action2.iIndex !== undefined);
+								const relAction = parsedActions[j].find(
+									(action2) => action2.id === action.id && action2.iIndex !== undefined
+								);
 								if (relAction) {
 									startIndex = relAction.iIndex;
 									break;
@@ -648,8 +733,11 @@ class AnimationEngine {
 							let k = 0;
 							for (let j = i; j < parsedActions.length; j++) {
 								let flag = false;
-								parsedActions[j].forEach(parsedAction => {
-									if ((parsedAction.play === false || parsedAction.type === ATYPES.PAUSE_ANIMATION) && parsedAction.id === action.id) {
+								parsedActions[j].forEach((parsedAction) => {
+									if (
+										(parsedAction.play === false || parsedAction.type === ATYPES.PAUSE_ANIMATION) &&
+										parsedAction.id === action.id
+									) {
 										flag = true;
 									}
 								});
@@ -659,7 +747,7 @@ class AnimationEngine {
 									this.internalActions[j].push({
 										type: ATYPES.SET_FRAME,
 										id: action.id,
-										iIndex: startIndex + c
+										iIndex: startIndex + c,
 									});
 									c++;
 								}
@@ -675,10 +763,11 @@ class AnimationEngine {
 	}
 
 	doTick() {
-		this.internalActions[this.iterator].forEach(action => {
+		this.internalActions[this.iterator].forEach((action) => {
 			switch (action.type) {
 				case ATYPES.INITIALIZE_ENTITY: {
-					const { id, sprite, alpha, posX, posY, sizeX, sizeY, rot, zIndex, iIndex, play, text, mirror } = action;
+					const { id, sprite, alpha, posX, posY, sizeX, sizeY, rot, zIndex, iIndex, play, text, mirror } =
+						action;
 					this.tracker[id] = {
 						...this.tracker[id],
 						display: true,
@@ -693,7 +782,7 @@ class AnimationEngine {
 						iIndex: iIndex,
 						play: play,
 						text: text,
-						mirror: mirror
+						mirror: mirror,
 					};
 					break;
 				}
@@ -701,7 +790,7 @@ class AnimationEngine {
 					const { id } = action;
 					this.tracker[id] = {
 						...this.tracker[id],
-						display: false
+						display: false,
 					};
 					break;
 				}
@@ -713,7 +802,7 @@ class AnimationEngine {
 						play: play || false,
 						iIndex: iIndex,
 						text: text,
-						mirror: mirror || false
+						mirror: mirror || false,
 					};
 					break;
 				}
@@ -721,7 +810,7 @@ class AnimationEngine {
 					const { id, posX } = action;
 					this.tracker[id] = {
 						...this.tracker[id],
-						posX: posX
+						posX: posX,
 					};
 					break;
 				}
@@ -729,7 +818,7 @@ class AnimationEngine {
 					const { id, posY } = action;
 					this.tracker[id] = {
 						...this.tracker[id],
-						posY: posY
+						posY: posY,
 					};
 					break;
 				}
@@ -737,7 +826,7 @@ class AnimationEngine {
 					const { id, sizeX } = action;
 					this.tracker[id] = {
 						...this.tracker[id],
-						sizeX: sizeX
+						sizeX: sizeX,
 					};
 					break;
 				}
@@ -745,7 +834,7 @@ class AnimationEngine {
 					const { id, sizeY } = action;
 					this.tracker[id] = {
 						...this.tracker[id],
-						sizeY: sizeY
+						sizeY: sizeY,
 					};
 					break;
 				}
@@ -753,7 +842,7 @@ class AnimationEngine {
 					const { id, alpha } = action;
 					this.tracker[id] = {
 						...this.tracker[id],
-						alpha: alpha
+						alpha: alpha,
 					};
 					break;
 				}
@@ -761,7 +850,7 @@ class AnimationEngine {
 					const { id, rot } = action;
 					this.tracker[id] = {
 						...this.tracker[id],
-						rot: rot
+						rot: rot,
 					};
 					break;
 				}
@@ -769,7 +858,7 @@ class AnimationEngine {
 					const { id, iIndex } = action;
 					this.tracker[id] = {
 						...this.tracker[id],
-						iIndex: iIndex
+						iIndex: iIndex,
 					};
 					break;
 				}
@@ -805,15 +894,14 @@ class AnimationEngine {
 				if (rot !== 0) {
 					this.ctx.save();
 					this.ctx.translate(posX + sizeX / 2, posY + sizeY / 2);
-					this.ctx.rotate(rot * Math.PI / 180);
-					sprite.draw(this.ctx, -sizeX / 2, -sizeY / 2, sizeX, sizeY, { iIndex: iIndex % sprite.indices, mirror });
+					this.ctx.rotate((rot * Math.PI) / 180);
+					sprite.draw(this.ctx, -sizeX / 2, -sizeY / 2, sizeX, sizeY, {
+						iIndex: iIndex % sprite.indices,
+						mirror,
+					});
 					this.ctx.restore();
 				} else {
-					if (sprite instanceof Sprite || sprite instanceof CompositeSprite) {
-						sprite.draw(this.ctx, posX, posY, sizeX, sizeY, { iIndex: iIndex % sprite.indices, mirror });
-					} else {
-						sprite.draw(this.ctx, posX, posY, sizeX, sizeY, iIndex, text);
-					}
+					sprite.draw(this.ctx, posX, posY, sizeX, sizeY, { iIndex: iIndex % sprite.indices, mirror, text });
 				}
 			});
 		if (this.iterator >= this.internalActions.length) {
